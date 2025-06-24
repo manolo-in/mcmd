@@ -1,0 +1,72 @@
+{
+	"name": "mcmd",
+	"description": "Meta framework for building CLI",
+	"version": "0.0.4",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"files": ["dist/**/*"],
+	"scripts": {
+		"demo-build": "bun run ./build.ts",
+		"build": "tsup",
+		"build:watch": "tsup --watch",
+		"type-check": "tsc --noEmit"
+	},
+	"exports": {
+		"./package.json": "./package.json",
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.js"
+		},
+		"./engine": {
+			"types": "./dist/engine.d.ts",
+			"import": "./dist/engine.mjs",
+			"require": "./dist/engine.js"
+		},
+		"./plugin": {
+			"types": "./dist/plugin.d.ts",
+			"import": "./dist/plugin.mjs",
+			"require": "./dist/plugin.js"
+		}
+	},
+	"dependencies": {
+		"chalk": "^5.4.1",
+		"configstore": "^7.0.0",
+		"marked": "^15.0.12",
+		"marked-terminal": "^7.3.0",
+		"prompts": "^2.4.2",
+		"yargs-parser": "^22.0.0",
+		"zod-validation-error": "^3.5.2",
+		"zodcli": "^0.0.4"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.2.17",
+		"@types/configstore": "^6.0.2",
+		"@types/marked-terminal": "^6.1.1",
+		"@types/node": "20.17.24",
+		"@types/prompts": "^2.4.9",
+		"@types/yargs-parser": "^21.0.3",
+		"tsup": "^8",
+		"typescript": "5.6.3",
+		"unimport": "^5.0.1",
+		"zod": "^3.25.67"
+	},
+	"peerDependencies": {
+		"zod": "^3.0.0"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/rajatsandeepsen/mcmd.git"
+	},
+	"bugs": {
+		"url": "https://github.com/rajatsandeepsen/mcmd/issues"
+	},
+	"keywords": ["cli", "zod", "meta"]
+}

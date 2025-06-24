@@ -1,0 +1,59 @@
+import { CommandTree } from "../engine";
+
+export const createTree = <T extends any>(data: Record<string, T>): CommandTree<T> => {
+    const tree = {} as CommandTree<T>;
+
+    for (const [path, func] of Object.entries(data)) {
+        let currentNode = tree;
+
+        if (path === "__index__") {
+            currentNode["__index__"] = func;
+            continue;
+        }
+
+        const keys = path.split("/");
+
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+
+            if (i === keys.length - 1) {
+                if (!currentNode[key]) {
+                    currentNode[key] = { __index__: func } as CommandTree<T>;
+                } else {
+                    (currentNode[key] as CommandTree<T>).__index__ = func;
+                }
+            } else {
+                if (!currentNode[key]) {
+                    currentNode[key] = {} as CommandTree<T>;
+                }
+                currentNode = currentNode[key] as CommandTree<T>;
+            }
+        }
+    }
+
+    return tree;
+};
+
+export const getFromTree = <T extends any>(
+    commands: (string | number)[],
+    tree: CommandTree<T>,
+): T => {
+    if (commands.length === 0) {
+        if (!tree.__index__) throw new Error("Command not found");
+
+        return tree.__index__;
+    }
+
+    let subTree = tree;
+
+    for (const cmd of commands) {
+        if (!(cmd in subTree)) throw new Error("Command not found");
+
+        subTree = subTree[cmd] as CommandTree<T>;
+    }
+    if (!subTree) throw new Error("Command not found");
+
+    if (!subTree.__index__) throw new Error("Command not found");
+
+    return subTree.__index__;
+};
