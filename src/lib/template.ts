@@ -6,13 +6,8 @@ export const template = (path: string) => `import Code, {
 
 import { fromError, optionParser, trys } from "mcmd/engine";
 
-const ArgsZod = optionParser({
-    options: options.strict(),
-    // aliases: optionAlias
-});
-
-export default async function (args: string[]) {
-    const data = trys(() => ArgsZod.parse(args));
+export default async function (args: unknown) {
+    const data = trys(() => options.parse(args));
 
     if (data.isSuccess) await Code(data.data, {});
     else {
@@ -21,13 +16,31 @@ export default async function (args: string[]) {
     }
 }`;
 
-export const newFilePath = (path: string) => path.split("/").join("__");
+type FileData = {
+    path: string;
+    fileName: string;
+    importName: string;
+    commandName: string;
+};
 
-export const entryTemplate = (files: string[]) => `#!/usr/bin/env node
+export const entryTemplate = (
+    files: FileData[],
+    tree: string,
+) => `#!/usr/bin/env node
 
-// import type { CommandTree } from "mcmd/engine.ts"
-${files.map((f) => `import ${f.split(".")[0].replace("__index", "")} from "./${f}"`).join("\n")}
+import { getFromTree, mainParser } from "mcmd/engine"
 
-const args = process.argv.slice(2)
-await index(args)
+${files.map((f) => `import ${f.importName} from "./${f.fileName}"`).join("\n")}
+
+const tree = ${tree}
+
+
+const args = process.argv.slice(2);
+
+const { _: commands, ...data } = mainParser(args);
+
+const cmdFunction = getFromTree(commands, tree)
+
+await cmdFunction(data)
+
 `;

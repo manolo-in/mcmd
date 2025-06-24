@@ -1,7 +1,15 @@
-import { entryTemplate, newFilePath, template } from "./lib/template";
-import { transformCode } from "./lib/transform";
+import { BunPlugin as BunPluginType } from "bun";
+import { entryTemplate, template } from "./lib/template";
+import { transformCode, transformPath } from "./lib/transform";
+import { createTree } from "./lib/tree";
+import chalk from "chalk";
 
-export async function BunPlugin() {
+export async function BunPluginCode(
+    options?: Partial<{
+        ignoreCLI: boolean;
+        javascript: boolean;
+    }>,
+) {
     const router = new Bun.FileSystemRouter({
         style: "nextjs",
         dir: "./app",
@@ -9,6 +17,7 @@ export async function BunPlugin() {
     });
 
     const entireFiles = [];
+    const treeData = {} as Record<string, string>;
 
     for (const [name, path] of Object.entries(router.routes)) {
         if (name === "/cli")
@@ -22,17 +31,34 @@ export async function BunPlugin() {
 
         await Bun.file("./.mcmd/app/" + file.src).write(newCode);
 
-        const newPath = newFilePath(file.src);
-        await Bun.file("./.mcmd/" + newPath).write(template(file.src));
+        const newPath = transformPath(file.src);
+
+        const newParentCode = template(file.src);
+        await Bun.file("./.mcmd/" + newPath.fileName).write(newParentCode);
 
         entireFiles.push(newPath);
+        treeData[newPath.commandName] = newPath.importName;
     }
 
-    await Bun.file("./.mcmd/cli.ts").write(entryTemplate(entireFiles));
+    if (!options?.ignoreCLI) {
+        const treeCode = JSON.stringify(
+            createTree<string>(treeData),
+            null,
+            2,
+        ).replaceAll(/: "([^"]*)"/g, ": $1");
+
+        await Bun.file("./.mcmd/cli.ts").write(
+            entryTemplate(entireFiles, treeCode),
+        );
+    }
 }
 
-export const Plugin = async (runtime:"bun" | "node" = "bun") => {
-    if (runtime !== "bun") throw new Error(`Plugin for ${runtime} isn't available yet`)
-
-    await BunPlugin()
-}
+export const BunPlugin = (
+    options?: Parameters<typeof BunPluginCode>[0],
+): BunPluginType => ({
+    name: "mcmd",
+    setup: async () => {
+        await BunPluginCode(options);
+        console.log(chalk.green("MCMD"), "Done building");
+    },
+});

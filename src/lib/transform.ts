@@ -33,3 +33,15 @@ export const transformCode = async (codeString: string) => {
 
     return (await injectImports(transformation + codeString)).code;
 };
+
+export const transformPath = (path: string) => {
+    const fileName = path.split("/").join("__")
+    const commandName = path.split(".")[0].replaceAll("index", "__index__")
+
+    return {
+        path,
+        fileName,
+        importName: fileName.split(".")[0].replace("__index", ""),
+        commandName
+    }
+}

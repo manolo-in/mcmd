@@ -1,14 +1,13 @@
 {
 	"name": "mcmd",
 	"description": "Meta framework for building CLI",
-	"version": "0.0.4",
+	"version": "0.0.8",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
 	"files": ["dist/**/*"],
 	"scripts": {
-		"demo-build": "bun run ./build.ts",
-		"build": "tsup",
+		"build": "bun run ./build.ts && tsup",
 		"build:watch": "tsup --watch",
 		"type-check": "tsc --noEmit"
 	},
@@ -26,8 +25,7 @@
 		},
 		"./plugin": {
 			"types": "./dist/plugin.d.ts",
-			"import": "./dist/plugin.mjs",
-			"require": "./dist/plugin.js"
+			"import": "./dist/plugin.js"
 		}
 	},
 	"dependencies": {
@@ -36,9 +34,9 @@
 		"marked": "^15.0.12",
 		"marked-terminal": "^7.3.0",
 		"prompts": "^2.4.2",
+		"unimport": "^5.0.1",
 		"yargs-parser": "^22.0.0",
-		"zod-validation-error": "^3.5.2",
-		"zodcli": "^0.0.4"
+		"zod-validation-error": "^3.5.2"
 	},
 	"devDependencies": {
 		"@types/bun": "^1.2.17",
@@ -47,9 +45,9 @@
 		"@types/node": "20.17.24",
 		"@types/prompts": "^2.4.9",
 		"@types/yargs-parser": "^21.0.3",
+		"bun-plugin-dts": "^0.3.0",
 		"tsup": "^8",
 		"typescript": "5.6.3",
-		"unimport": "^5.0.1",
 		"zod": "^3.25.67"
 	},
 	"peerDependencies": {
@@ -68,5 +66,5 @@
 	"bugs": {
 		"url": "https://github.com/rajatsandeepsen/mcmd/issues"
 	},
-	"keywords": ["cli", "zod", "meta"]
+	"keywords": ["cli", "zod", "meta", "bun"]
 }
