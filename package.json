@@ -1,9 +1,10 @@
 {
 	"name": "mcmd",
 	"description": "Meta framework for building CLI",
-	"version": "0.0.9",
+	"version": "0.0.93",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
+	"bin": "./dist/cli.js",
 	"types": "./dist/index.d.ts",
 	"files": ["dist/**/*"],
 	"scripts": {
@@ -13,6 +14,7 @@
 	},
 	"exports": {
 		"./package.json": "./package.json",
+		"./base.json": "./dist/base.json",
 		".": {
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.mjs",
@@ -26,6 +28,9 @@
 		"./plugin": {
 			"types": "./dist/plugin.d.ts",
 			"import": "./dist/plugin.js"
+		},
+		"./type": {
+			"types": "./dist/type.d.ts"
 		}
 	},
 	"dependencies": {
@@ -66,5 +71,5 @@
 	"bugs": {
 		"url": "https://github.com/rajatsandeepsen/mcmd/issues"
 	},
-	"keywords": ["cli", "zod", "meta", "bun"]
+	"keywords": ["cli", "zod", "meta", "bun", "router", "file-based"]
 }

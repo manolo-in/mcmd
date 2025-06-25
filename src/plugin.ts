@@ -16,7 +16,7 @@ export async function BunPluginCode(
         fileExtensions: [".ts"],
     });
 
-    const entireFiles = [];
+    const entireFiles = [] as ReturnType<typeof transformPath>[]
     const treeData = {} as Record<string, string>;
 
     for (const [name, path] of Object.entries(router.routes)) {
@@ -59,6 +59,6 @@ export const BunPlugin = (
     name: "mcmd",
     setup: async () => {
         await BunPluginCode(options);
-        console.log(chalk.green("MCMD"), "Done building");
+        console.log(chalk.green("MCMD:"), "Building CLI completed");
     },
 });

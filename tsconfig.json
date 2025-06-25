@@ -13,6 +13,8 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "strict": true,
     "types": ["@types/node", "@types/bun"],
@@ -22,8 +24,16 @@
     ],
     "module": "ESNext",
     "target": "ES2021",
-    "stripInternal": true
+    "stripInternal": true,
+    "paths": {
+        "mcmd": [
+            "./src/index.ts"
+        ],
+        "mcmd/*": [
+            "./src/*"
+        ]
+    }
   },
   "include": ["."],
-  "exclude": ["*/dist", "dist", "build", "node_modules"]
+  "exclude": ["*/dist", "dist", "build", "node_modules"],
 }

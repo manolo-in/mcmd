@@ -9,7 +9,9 @@ import { fromError, optionParser, trys } from "mcmd/engine";
 export default async function (args: unknown) {
     const data = trys(() => options.parse(args));
 
-    if (data.isSuccess) await Code(data.data, {});
+    if (data.isSuccess) await Code
+        // @ts-ignore
+        (data.data, {});
     else {
         const validationError = fromError(data.error);
         console.error(validationError.toString());

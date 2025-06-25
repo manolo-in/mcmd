@@ -14,3 +14,5 @@ export const Console = {
     red: (text: string) => console.log(chalk.red(text)),
     blue: (text: string) => console.log(chalk.blue(text)),
 };
+
+export type ConsoleType = typeof Console

@@ -35,7 +35,7 @@ export const createTree = <T extends any>(data: Record<string, T>): CommandTree<
         const keys = path.split("/");
 
         for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
+            const key = keys[i] as string
 
             if (i === keys.length - 1) {
                 if (!currentNode[key]) {

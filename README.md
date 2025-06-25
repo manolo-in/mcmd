@@ -1,6 +1,6 @@
 # MCMD - A Meta framework for building CLIs
 
-Enjoy the developer experience of Nextjs but for CLI development.
+Enjoy the DX of File Based Routing (eg: NextJs) for CLI development.
 
 ### Usage
 
@@ -42,47 +42,40 @@ root
 
 ### Coding
 
+Don't need to import `zod` or `Command`, we'll handle everything for you.
+
 ```ts
 // app/index.ts
-import { z } from "zod";
-import { defineCommand } from "mcmd";
 
 export const options = z.object({
-    name: z.string(), # npx my-cli --name Rajat
+    name: z.string()
 });
 
-export default defineCommand<typeof options>(({ name }) => {
-    console.log("Hi", name); // Hi Rajat
+export default Command((data) => {
+    const { name } = data;
+    console.log("Hi", name);
 });
+
+// npx my-cli --name Rajat
+```
+
+```ts
+// app/init.ts
+
+export default () => {
+    console.log("Done Init");
+};
+
+// npx my-cli init
 ```
 
 ### Final Build
 
-```ts
-// build.ts
-import { BunPlugin } from "mcmd/plugin";
-import dts from "bun-plugin-dts";
-
-Bun.build({
-    entrypoints: ["./.mcmd/cli.ts"],
-    packages: "external",
-    target: "node",
-    splitting: true,
-    outdir: "./dist",
-    plugins: [
-        BunPlugin(), // plugin
-        dts({
-            output: {
-                exportReferencedTypes: true,
-                noBanner: true,
-            },
-        }),
-    ],
-});
-```
-
 ```bash
-bun run ./build.ts
+bun run build
+
+# or
+# bunx mcmd build
 ```
 
 
@@ -107,4 +100,42 @@ bun publish
 
 ```bash
 bunx my-cli --name Rajat
+```
+
+### TypeScript Support
+
+Extends you `tsconfig.json` with `mcmd/base.json`
+```json
+{
+    // tsconfig.json
+    compilerOptions: {},
+    "include": ["."],
+    "exclude": [
+        "dist",
+        "node_modules"
+    ],
+    "extends": [
+      "mcmd/base.json" // important
+    ]
+}
+```
+
+Or paste this code to `./type.d.ts`
+```ts
+// Don't remove this.
+// This helps for automatic type assigning for MCMD.
+/// <reference types="mcmd/type" />
+```
+
+Follow this code to get full TypeScript support
+```ts
+// app/index.ts
+export const options = z.object({
+    name: z.string()
+});
+
+export default Command<typeof options>((data) => {
+    const { name } = data;
+    console.log("Hi", name);
+});
 ```
