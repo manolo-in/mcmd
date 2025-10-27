@@ -6,7 +6,7 @@ Enjoy the DX of File Based Routing (eg: NextJs) for CLI development.
 
 Install [MCMD package](https://npmjs.com/package/mcmd) from NPM
 
-Or clone the ready-made template from [MCMD github](https://github.com/rajatsandeepsen/create-mcmd-app) repository
+Or clone the ready-made template from [MCMD github](https://github.com/manolo-in/create-mcmd-app) repository
 ```bash
 bun create mcmd-app --name my-cli
 ```
@@ -71,11 +71,14 @@ export default () => {
 
 ### Final Build
 
+> [!IMPORTANT]
+> Make sure to use Bun for building the CLI.
+
 ```bash
-bun run build
+bun --bun run build
 
 # or
-# bunx mcmd build
+# bunx --bun mcmd build
 ```
 
 
@@ -98,8 +101,14 @@ bun publish
 
 ### Enjoy CLI
 
+> [!TIP]
+> Now you don't strictly need bun to run your CLI.
+
 ```bash
 bunx my-cli --name Rajat
+
+# or
+npx my-cli --name Rajat
 ```
 
 ### TypeScript Support
