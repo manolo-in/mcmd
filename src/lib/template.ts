@@ -4,9 +4,12 @@ export const template = (path: string) => `import Code, {
     options,
 } from "./app/${path}";
 
-import { fromError, optionParser, trys } from "mcmd/engine";
+import { fromError, getHelp, optionParser, trys } from "mcmd/engine";
 
 export default async function (args: unknown) {
+    const help = getHelp(args, options)
+    if (help) return;
+
     const data = trys(() => options.parse(args));
 
     if (data.isSuccess) await Code

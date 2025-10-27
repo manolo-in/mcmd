@@ -1,4 +1,5 @@
 import parser from "yargs-parser";
+import { AnyZodObject, z } from "zod";
 
 export { fromError } from "zod-validation-error";
 export { argumentParser as optionParser } from "zodcli";
@@ -37,4 +38,20 @@ export const trys = <T, U = Error>(
             isSuccess: false,
         };
     }
+};
+
+export const getHelp = (args:unknown, options: AnyZodObject) => {
+    const help = z
+        .object({
+            h: z.boolean(),
+            help: z.boolean(),
+        })
+        .partial().parse(args)
+
+    if (help.h || help.help) {
+        console.log(options.description ?? "Get Help");
+        return true
+    }
+
+    return false
 };
