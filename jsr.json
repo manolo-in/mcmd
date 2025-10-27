@@ -1,0 +1,11 @@
+{
+  "name": "@manolo/mcmd",
+  "version": "0.0.93",
+  "license": "MIT",
+  "exports": {
+    ".": "./dist/index.js",
+    "./engine": "./dist/engine.js",
+    "./plugin": "./dist/plugin.js",
+    "./type": "./dist/type.js"
+  }
+}
