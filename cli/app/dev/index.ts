@@ -1,30 +1,26 @@
+import { spawnSync } from "node:child_process";
 import transpileCode, { options as transpileOptions } from "../transpile";
 
 export const options = transpileOptions;
 
 export default Command<typeof options>(async (data) => {
-    const { mode } = data;
+	const { mode } = data;
 
-    await transpileCode(data)
+	await transpileCode(data);
 
-    switch (mode) {
-        case "bun": {
-            if (!Bun) Console.red("Please install Bun JS Runtime");
+	Console.blue("Running CLI test command...");
 
-            const { stdout } = Bun.spawnSync(["bun", "run", "./.mcmd/cli.ts", "test"], {
-                // @ts-ignore
-                "stdio": ["inherit"]
-            });
+	try {
+		const result = spawnSync("node", ["./.mcmd/cli.ts", "test"], {
+			stdio: "inherit",
+		});
 
-            console.log(stdout.toString());
-
-            return;
-        }
-        default: {
-            Console.red(
-                "Dev command is only available for Bun envirnment right now",
-            );
-            return;
-        }
-    }
+		if (result.error) {
+			Console.red("Dev command failed!");
+			throw result.error;
+		}
+	} catch (error) {
+		Console.red("Dev command failed!");
+		throw error;
+	}
 });
