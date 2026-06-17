@@ -1,8 +1,14 @@
 import { pluginCode } from "mcmd/plugin";
 
 export const options = z.object({
-	mode: z.enum(["node", "bun", "deno"]).default("node").describe("Specify javascript runtime to use"),
-	"show-shebang": z.boolean().default(false).describe("To set the shebang on top of CLI entry path, default is false")
+	mode: z
+		.enum(["node", "bun", "deno"])
+		.default("node")
+		.describe("Specify javascript runtime to use"),
+	"show-shebang": z
+		.boolean()
+		.default(false)
+		.describe("To set the shebang on top of CLI entry path, default is false"),
 });
 
 export default Command<typeof options>(async (data) => {
@@ -11,17 +17,25 @@ export default Command<typeof options>(async (data) => {
 	switch (mode) {
 		case "node": {
 			Console.blue("Transpiling for Node.js...");
-			await pluginCode(options["show-shebang"] ? {
-				shebang: "node"
-			} : undefined);
+			await pluginCode(
+				options["show-shebang"]
+					? {
+							shebang: "node",
+						}
+					: undefined,
+			);
 			Console.green("Transpilation completed!");
 			return;
 		}
 		case "bun": {
 			Console.blue("Transpiling for Bun.js...");
-			await pluginCode(options["show-shebang"] ? {
-				shebang: "bun"
-			} : undefined);
+			await pluginCode(
+				options["show-shebang"]
+					? {
+							shebang: "bun",
+						}
+					: undefined,
+			);
 			Console.green("Transpilation completed!");
 			return;
 		}
@@ -30,9 +44,7 @@ export default Command<typeof options>(async (data) => {
 			return;
 		}
 		default: {
-			Console.red(
-				"Unknown mode provided",
-			);
+			Console.red("Unknown mode provided");
 			return;
 		}
 	}

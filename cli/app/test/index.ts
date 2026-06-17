@@ -1,3 +1,3 @@
 export default async () => {
-    Console.green("Tested CLI")
-}
+	Console.green("Tested CLI");
+};

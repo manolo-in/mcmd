@@ -1,7 +1,7 @@
 {
 	"name": "mcmd",
 	"description": "Meta framework for building CLI",
-	"version": "0.1.0-beta.0",
+	"version": "0.1.0",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
@@ -53,6 +53,7 @@
 		"zodcli": "^0.0.4"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.5.0",
 		"@types/configstore": "^6.0.2",
 		"@types/marked-terminal": "^6.1.1",
 		"@types/node": "20.17.24",

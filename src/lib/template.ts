@@ -31,7 +31,7 @@ type FileData = {
 export const entryTemplate = (
 	files: FileData[],
 	tree: string,
-	shebang?: "bun" | "node"
+	shebang?: "bun" | "node",
 ) => `${shebang ? `#!/usr/bin/env ${shebang}\n` : ""}
 import { getFromTree, mainParser } from "mcmd/engine"
 

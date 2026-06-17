@@ -1,6 +1,6 @@
 import Code from "./dev";
 
 export * from "./dev";
-export default Code
+export default Code;
 
-export const ignoreThisFile = true
+export const ignoreThisFile = true;

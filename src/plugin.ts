@@ -60,7 +60,10 @@ export async function pluginCode(
 
 		const cliOutputPath = join(outDir, "cli.ts");
 		mkdirSync(dirname(cliOutputPath), { recursive: true });
-		writeFileSync(cliOutputPath, entryTemplate(entireFiles, treeCode, options?.shebang));
+		writeFileSync(
+			cliOutputPath,
+			entryTemplate(entireFiles, treeCode, options?.shebang),
+		);
 	}
 }
 

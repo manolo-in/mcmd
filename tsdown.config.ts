@@ -13,9 +13,7 @@ export default defineConfig([
 		entry: ["cli/.mcmd/cli.ts"],
 		format: ["esm"],
 		outDir: "bin",
-		dts: {
-			sourcemap: false,
-		},
+		dts: false,
 		banner: {
 			js: "#!/usr/bin/env node",
 		},
