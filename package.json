@@ -1,36 +1,43 @@
 {
 	"name": "mcmd",
 	"description": "Meta framework for building CLI",
-	"version": "0.0.93",
-	"main": "./dist/index.js",
+	"version": "0.1.0",
+	"type": "module",
+	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
-	"bin": "./dist/cli.js",
-	"types": "./dist/index.d.ts",
-	"files": ["dist/**/*"],
+	"bin": "./bin/cli.mjs",
+	"types": "./dist/index.d.mts",
+	"files": [
+		"bin/**/*",
+		"dist/**/*"
+	],
 	"scripts": {
-		"build": "tsup && bun run ./build.ts",
-		"build:watch": "tsup --watch",
+		"build": "bun run build:cli && bun run build:code && bun run copy",
+		"prepublishOnly": "bun run build",
+		"build:cli": "bun run ./cli/build.ts",
+		"build:code": "tsdown",
+		"build:watch": "tsdown --watch",
+		"copy": "cp ./src/base.json ./dist/",
+		"test": "bun run ./bin/cli.mjs",
 		"type-check": "tsc --noEmit"
 	},
 	"exports": {
 		"./package.json": "./package.json",
 		"./base.json": "./dist/base.json",
 		".": {
-			"types": "./dist/index.d.ts",
+			"types": "./dist/index.d.mts",
 			"import": "./dist/index.mjs",
-			"require": "./dist/index.js"
+			"require": "./dist/index.cjs"
 		},
 		"./engine": {
-			"types": "./dist/engine.d.ts",
+			"types": "./dist/engine.d.mts",
 			"import": "./dist/engine.mjs",
-			"require": "./dist/engine.js"
-		},
-		"./plugin": {
-			"types": "./dist/plugin.d.ts",
-			"import": "./dist/plugin.js"
+			"require": "./dist/engine.cjs"
 		},
 		"./type": {
-			"types": "./dist/type.d.ts"
+			"types": "./dist/type.d.mts",
+			"import": "./dist/type.mjs",
+			"require": "./dist/type.cjs"
 		}
 	},
 	"dependencies": {
@@ -40,18 +47,19 @@
 		"marked-terminal": "^7.3.0",
 		"prompts": "^2.4.2",
 		"unimport": "^5.0.1",
+		"unrouting": "^0.1.7",
 		"yargs-parser": "^22.0.0",
-		"zod-validation-error": "^3.5.2"
+		"zod-validation-error": "^3.5.2",
+		"zodcli": "^0.0.4"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.2.17",
+		"@biomejs/biome": "^2.5.0",
 		"@types/configstore": "^6.0.2",
 		"@types/marked-terminal": "^6.1.1",
 		"@types/node": "20.17.24",
 		"@types/prompts": "^2.4.9",
 		"@types/yargs-parser": "^21.0.3",
-		"bun-plugin-dts": "^0.3.0",
-		"tsup": "^8",
+		"tsdown": "^0.21.10",
 		"typescript": "5.6.3",
 		"zod": "^3.25.67"
 	},
@@ -71,5 +79,12 @@
 	"bugs": {
 		"url": "https://github.com/rajatsandeepsen/mcmd/issues"
 	},
-	"keywords": ["cli", "zod", "meta", "bun", "router", "file-based"]
+	"keywords": [
+		"cli",
+		"zod",
+		"meta",
+		"router",
+		"file-based",
+		"folder-based"
+	]
 }

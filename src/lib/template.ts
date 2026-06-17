@@ -22,17 +22,17 @@ export default async function (args: unknown) {
 }`;
 
 type FileData = {
-    path: string;
-    fileName: string;
-    importName: string;
-    commandName: string;
+	path: string;
+	fileName: string;
+	importName: string;
+	commandName: string;
 };
 
 export const entryTemplate = (
-    files: FileData[],
-    tree: string,
-) => `#!/usr/bin/env node
-
+	files: FileData[],
+	tree: string,
+	shebang?: "bun" | "node",
+) => `${shebang ? `#!/usr/bin/env ${shebang}\n` : ""}
 import { getFromTree, mainParser } from "mcmd/engine"
 
 ${files.map((f) => `import ${f.importName} from "./${f.fileName}"`).join("\n")}

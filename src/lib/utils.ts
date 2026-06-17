@@ -7,12 +7,12 @@ import prompts from "prompts";
 marked.use(markedTerminal());
 
 export const Console = {
-    ...console,
-    md: (text: string) => console.log(marked(text)),
-    prompts,
-    green: (text: string) => console.log(chalk.green(text)),
-    red: (text: string) => console.log(chalk.red(text)),
-    blue: (text: string) => console.log(chalk.blue(text)),
+	...console,
+	md: (text: string) => console.log(marked(text)),
+	prompts,
+	green: (text: string) => console.log(chalk.green(text)),
+	red: (text: string) => console.log(chalk.red(text)),
+	blue: (text: string) => console.log(chalk.blue(text)),
 };
 
-export type ConsoleType = typeof Console
+export type ConsoleType = typeof Console;
