@@ -1,4 +1,4 @@
-import type { DefineCommand } from "./lib/define";
+import type { DefineCommand, DefineConfig } from "./lib/define";
 import type { ConsoleType } from "./lib/utils";
 import Zod from "zod";
 
@@ -8,4 +8,5 @@ declare global {
 		data: DefineCommand<T>,
 	): any;
 	const Console: ConsoleType;
+	const defineConfig: DefineConfig;
 }

@@ -34,18 +34,23 @@ export const entryTemplate = (
 	shebang?: "bun" | "node",
 ) => `${shebang ? `#!/usr/bin/env ${shebang}\n` : ""}
 import { getFromTree, mainParser } from "mcmd/engine"
+import mcmdConfig from "./mcmd.config.ts"
 
 ${files.map((f) => `import ${f.importName} from "./${f.fileName}"`).join("\n")}
 
 const tree = ${tree}
 
-
 const args = process.argv.slice(2);
 
-const { _: commands, ...data } = mainParser(args);
+const { _: commands, ...data } = mainParser(args, mcmdConfig.parser);
 
 const cmdFunction = getFromTree(commands, tree)
 
 await cmdFunction(data)
-
 `;
+
+export const defaultConfig = () => `import { defineConfig } from 'mcmd';
+export default defineConfig({
+	parser: {}
+})
+`

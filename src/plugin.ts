@@ -2,9 +2,11 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import chalk from "chalk";
 import { buildRoutesFromAppDir, matchRoute } from "./lib/routing";
-import { entryTemplate, template } from "./lib/template";
-import { transformCode, transformPath } from "./lib/transform";
+import { defaultConfig, entryTemplate, template } from "./lib/template";
+import { transformCode, transformConfig, transformPath } from "./lib/transform";
 import { createTree } from "./lib/tree";
+
+const finalConfigFile = "mcmd.config.ts";
 
 export async function pluginCode(
 	options?: Partial<{
@@ -13,10 +15,13 @@ export async function pluginCode(
 		appDir?: string;
 		outDir?: string;
 		shebang?: "bun" | "node";
+		config?: string
 	}>,
 ) {
 	const appDir = options?.appDir || "./app";
 	const outDir = options?.outDir || "./.mcmd";
+	const configFileSrc = options?.config || "config.ts";
+	let foundConfigFile = null
 
 	// Build routes from app directory using unrouting
 	const routes = buildRoutesFromAppDir(appDir);
@@ -30,6 +35,18 @@ export async function pluginCode(
 
 		const matched = matchRoute(routeName, routes);
 		if (!matched) continue;
+
+		if (matched.src === configFileSrc) {
+			const configContent = readFileSync(matched.filePath, "utf-8").trim();
+			if (configContent) {
+				foundConfigFile = filePath;
+				const newConfig = await transformConfig(configContent);
+				const appOutputPath = join(outDir, finalConfigFile);
+				mkdirSync(dirname(appOutputPath), { recursive: true });
+				writeFileSync(appOutputPath, newConfig);
+			}
+			continue;
+		}
 
 		// Read file using Node.js fs
 		const code = readFileSync(matched.filePath, "utf-8");
@@ -57,6 +74,12 @@ export async function pluginCode(
 			null,
 			2,
 		).replaceAll(/: "([^"]*)"/g, ": $1");
+
+		if (!foundConfigFile) {
+			const appOutputPath = join(outDir, finalConfigFile);
+			mkdirSync(dirname(appOutputPath), { recursive: true });
+			writeFileSync(appOutputPath, defaultConfig());
+		}
 
 		const cliOutputPath = join(outDir, "cli.ts");
 		mkdirSync(dirname(cliOutputPath), { recursive: true });

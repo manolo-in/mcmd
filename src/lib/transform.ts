@@ -59,3 +59,13 @@ export const transformPath = (path: string) => {
 		commandName,
 	};
 };
+
+export const transformConfig = async (configString: string) => {
+	const { injectImports } = createUnimport({
+		imports: [
+			{ name: "defineConfig", from: "mcmd" },
+		],
+	});
+
+	return (await injectImports(configString)).code;
+}
