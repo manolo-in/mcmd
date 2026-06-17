@@ -12,6 +12,7 @@ export async function pluginCode(
 		javascript: boolean;
 		appDir?: string;
 		outDir?: string;
+		shebang?: "bun" | "node";
 	}>,
 ) {
 	const appDir = options?.appDir || "./app";
@@ -59,7 +60,7 @@ export async function pluginCode(
 
 		const cliOutputPath = join(outDir, "cli.ts");
 		mkdirSync(dirname(cliOutputPath), { recursive: true });
-		writeFileSync(cliOutputPath, entryTemplate(entireFiles, treeCode));
+		writeFileSync(cliOutputPath, entryTemplate(entireFiles, treeCode, options?.shebang));
 	}
 }
 

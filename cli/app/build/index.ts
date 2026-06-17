@@ -5,8 +5,6 @@ import transpileCode, { options as transpileOptions } from "../transpile";
 export const options = transpileOptions;
 
 export default Command<typeof options>(async (data) => {
-	const { mode } = data;
-
 	await transpileCode(data);
 
 	Console.blue("Building CLI with tsdown...");

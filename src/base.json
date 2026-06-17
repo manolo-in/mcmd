@@ -14,6 +14,6 @@
 		"noImplicitAny": false,
 		"allowImportingTsExtensions": true,
 		"noEmit": true,
-		"types": ["@types/node", "./type.d.mts"]
+		"types": ["@types/node", "./type.d.mts", "mcmd/type"]
 	}
 }

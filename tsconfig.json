@@ -17,7 +17,7 @@
     "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "strict": true,
-    "types": ["@types/node", "@types/bun"],
+    "types": ["@types/node"],
     "lib": [
       "dom",
       "ES2021"
