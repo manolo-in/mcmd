@@ -1,3 +1,7 @@
+<a href="https://github.com/manolo-in/mcmd">
+    <img alt="cover" src="https://github.com/manolo-in/mcmd/blob/main/cover.png?raw=true" />
+</a>
+
 # MCMD - A Meta framework for building CLIs
 
 Enjoy the DX of File Based Routing (eg: NextJs) for CLI development.
