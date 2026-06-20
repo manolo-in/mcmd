@@ -1,6 +1,6 @@
+import type Zod from "zod";
 import type { DefineCommand, DefineConfig } from "./lib/define";
 import type { ConsoleType } from "./lib/utils";
-import Zod from "zod";
 
 declare global {
 	const z: typeof Zod;

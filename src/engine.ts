@@ -1,15 +1,15 @@
 import parser from "yargs-parser";
-import { AnyZodObject, z } from "zod";
+import { type AnyZodObject, z } from "zod";
 
 export { fromError } from "zod-validation-error";
 export { argumentParser as optionParser } from "zodcli";
-export { getFromTree, createTree } from "./lib/tree";
+export { createTree, getFromTree } from "./lib/tree";
 
 export const mainParser = parser;
 
 export type CommandFunction = (args: string[]) => Promise<void>;
 
-export type CommandTree<T extends any = CommandFunction> = {
+export type CommandTree<T = CommandFunction> = {
 	__index__?: T;
 } & {
 	[k in string as k extends "__index__" ? never : k]: T | CommandTree<T>;

@@ -2,9 +2,12 @@
     <img alt="cover" src="https://github.com/manolo-in/mcmd/blob/main/cover.png?raw=true" />
 </a>
 
-# MCMD - A Meta framework for building CLIs
+# MCMD - A Meta framework for building CLIs tools
 
-Enjoy the DX of File Based Routing (eg: NextJs) for CLI development.
+> MCMD short name for Meta Framework for Command. 
+> Inspired from Next.JS (Meta Framework for React.JS)
+
+Enjoy the DX of File Based Routing for CLI development with zod validation and TypeScript support out of the box.
 
 ### Usage
 

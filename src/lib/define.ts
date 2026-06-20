@@ -1,5 +1,5 @@
-import type { AnyZodObject, TypeOf } from "zod";
 import type { Options as ParserOptions } from "yargs-parser";
+import type { AnyZodObject, TypeOf } from "zod";
 
 export type InferOptions<T extends AnyZodObject> = TypeOf<T>;
 
@@ -45,8 +45,10 @@ export type Alias = Lowercase<Alphabets> | Uppercase<Alphabets>;
 export type Options = AnyZodObject;
 export type OptionsAlias = Record<string, keyof AnyZodObject>;
 
-export const defineConfig = (options: Partial<{
-	parser: ParserOptions
-}>) => options
+export const defineConfig = (
+	options: Partial<{
+		parser: ParserOptions;
+	}>,
+) => options;
 
 export type DefineConfig = typeof defineConfig;

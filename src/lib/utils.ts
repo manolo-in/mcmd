@@ -3,7 +3,7 @@ import { marked } from "marked";
 import { markedTerminal } from "marked-terminal";
 import prompts from "prompts";
 
-// @ts-ignore
+// @ts-expect-error
 marked.use(markedTerminal());
 
 export const Console = {
