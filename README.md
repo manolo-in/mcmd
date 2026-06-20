@@ -57,7 +57,7 @@ export const options = z.object({
 
 export default Command((data) => {
 	const { name } = data;
-	console.log("Hi", name);
+	Console.log("Hi", name);
 });
 
 // npx my-cli --name Rajat
@@ -67,7 +67,8 @@ export default Command((data) => {
 // app/init.ts
 
 export default () => {
-	console.log("Done Init");
+	// a custom console with colors and prompts support
+	Console.log("Done Init");
 };
 
 // npx my-cli init
@@ -197,9 +198,30 @@ export const options = z.object({
 
 export default Command<typeof options>((data) => {
 	const { name } = data;
-	console.log("Hi", name);
+	Console.log("Hi", name); 
 });
 ```
+
+### Customize the Parser
+
+Create the file `config.ts` inside the `app` folder and paste this.
+
+```ts
+export default defineConfig({
+	parser: {
+		// paste your parser config here
+
+		// eg
+		string: ['bar'], 
+		configuration: {
+			'boolean-negation': false
+		}
+	},
+});
+```
+
+- [yargs-parser](https://github.com/yargs/yargs-parser#configuration)
+
 
 ### BYOB - Bring Your Own Bundler
 
@@ -230,3 +252,13 @@ export default defineConfig({
 ```bash
 npx tsup
 ```
+
+### References
+
+MCMD is built on top of some amazing libraries, you can directly use them in your code without installing them separately.
+
+- [zod](https://zod.dev/)
+- [tsdown](https://tsdown.dev/)
+- [yargs-parser](https://github.com/yargs/yargs-parser)
+- [prompts](https://github.com/terkelg/prompts)
+- [marked-terminal](https://github.com/mikaelbr/marked-terminal)
