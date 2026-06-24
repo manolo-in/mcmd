@@ -1,5 +1,6 @@
 import parser from "yargs-parser";
 import { type AnyZodObject, z } from "zod";
+import type { CommandStrings } from "./lib/define";
 
 export { fromError } from "zod-validation-error";
 export { argumentParser as optionParser } from "zodcli";
@@ -55,4 +56,19 @@ export const getHelp = (args: unknown, options: AnyZodObject) => {
 	}
 
 	return false;
+};
+
+export const runHook = async (
+	hook:
+		| ((commands: CommandStrings, data: object) => Promise<unknown>)
+		| undefined,
+	commands: CommandStrings,
+	data: object,
+) => {
+	if (!hook) return;
+	try {
+		return await hook(commands, data);
+	} catch (error) {
+		console.error("Error in hook:", error);
+	}
 };

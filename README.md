@@ -196,26 +196,35 @@ export const options = z.object({
 	name: z.string(),
 });
 
-export default Command<typeof options>((data) => {
+export default Command<typeof options, {}>((data, beforeData) => {
 	const { name } = data;
 	Console.log("Hi", name); 
 });
 ```
 
-### Customize the Parser
+### Configuration
 
 Create the file `config.ts` inside the `app` folder and paste this.
 
 ```ts
 export default defineConfig({
+	// paste your parser config here
+	// eg
 	parser: {
-		// paste your parser config here
-
-		// eg
 		string: ['bar'], 
 		configuration: {
 			'boolean-negation': false
 		}
+	},
+	// custom hook for before and after running the command
+	hook: {
+		after: async (commands, data) => {},
+		
+		// before, but after parsing the arguments
+		before: async (commands, data) => {
+			return beforeData; // access this ↴
+		},
+		// export default Command((data, beforeData) => {})
 	},
 });
 ```

@@ -1,4 +1,5 @@
 import type { CommandTree } from "../engine";
+import type { CommandStrings } from "./define";
 
 // const treeData = {
 //     __index__: "root",
@@ -21,9 +22,7 @@ import type { CommandTree } from "../engine";
 //     },
 // } // satisfies CommandTree
 
-export const createTree = <T extends any>(
-	data: Record<string, T>,
-): CommandTree<T> => {
+export const createTree = <T>(data: Record<string, T>): CommandTree<T> => {
 	const tree = {} as CommandTree<T>;
 
 	for (const [path, func] of Object.entries(data)) {
@@ -59,8 +58,8 @@ export const createTree = <T extends any>(
 	return tree;
 };
 
-export const getFromTree = <T extends any>(
-	commands: (string | number)[],
+export const getFromTree = <T>(
+	commands: CommandStrings,
 	tree: CommandTree<T>,
 ): T => {
 	if (commands.length === 0) {

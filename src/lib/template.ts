@@ -6,7 +6,7 @@ export const template = (path: string) => `import Code, {
 
 import { fromError, getHelp, optionParser, trys } from "mcmd/engine";
 
-export default async function (args: unknown) {
+export default async function (args: unknown, beforeData: unknown) {
     const help = getHelp(args, options)
     if (help) return;
 
@@ -14,7 +14,7 @@ export default async function (args: unknown) {
 
     if (data.isSuccess) await Code
         // @ts-ignore
-        (data.data, {});
+        (data.data, beforeData);
     else {
         const validationError = fromError(data.error);
         console.error(validationError.toString());
@@ -33,7 +33,7 @@ export const entryTemplate = (
 	tree: string,
 	shebang?: "bun" | "node",
 ) => `${shebang ? `#!/usr/bin/env ${shebang}\n` : ""}
-import { getFromTree, mainParser } from "mcmd/engine"
+import { getFromTree, mainParser, runHook } from "mcmd/engine"
 import mcmdConfig from "./mcmd.config.ts"
 
 ${files.map((f) => `import ${f.importName} from "./${f.fileName}"`).join("\n")}
@@ -44,13 +44,21 @@ const args = process.argv.slice(2);
 
 const { _: commands, ...data } = mainParser(args, mcmdConfig.parser);
 
-const cmdFunction = getFromTree(commands, tree)
+const beforeData = await runHook(mcmdConfig?.hook?.before, commands, data);
 
-await cmdFunction(data)
+const cmdFunction = getFromTree(commands, tree);
+await cmdFunction(data, beforeData);
+
+await runHook(mcmdConfig?.hook?.after, commands, data);
 `;
 
 export const defaultConfig = () => `import { defineConfig } from 'mcmd';
+
 export default defineConfig({
-	parser: {}
+	parser: {},
+	hook: {
+		before: async (commands, data) => {},
+		after: async (commands, data) => {},
+	}
 })
-`
+`;

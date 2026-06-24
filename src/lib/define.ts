@@ -3,15 +3,16 @@ import type { AnyZodObject, TypeOf } from "zod";
 
 export type InferOptions<T extends AnyZodObject> = TypeOf<T>;
 
-export const defineCommand = <T extends AnyZodObject>(
-	df: (options: InferOptions<T>, extra?: any) => void | Promise<void>,
+export const defineCommand = <T extends AnyZodObject, U>(
+	df: (options: InferOptions<T>, beforeData?: U) => void | Promise<void>,
 ) => {
 	return df;
 };
 
-export type DefineCommand<T extends AnyZodObject = AnyZodObject> = ReturnType<
-	typeof defineCommand<T>
->;
+export type DefineCommand<
+	T extends AnyZodObject = AnyZodObject,
+	U = unknown,
+> = ReturnType<typeof defineCommand<T, U>>;
 
 type Alphabets =
 	| "A"
@@ -45,9 +46,15 @@ export type Alias = Lowercase<Alphabets> | Uppercase<Alphabets>;
 export type Options = AnyZodObject;
 export type OptionsAlias = Record<string, keyof AnyZodObject>;
 
+export type CommandStrings = (string | number)[];
+
 export const defineConfig = (
 	options: Partial<{
 		parser: ParserOptions;
+		hook: {
+			before: (commands: CommandStrings, data: object) => Promise<unknown>;
+			after: (commands: CommandStrings, data: object) => Promise<void>;
+		};
 	}>,
 ) => options;
 
