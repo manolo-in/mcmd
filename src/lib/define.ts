@@ -47,14 +47,19 @@ export type Options = AnyZodObject;
 export type OptionsAlias = Record<string, keyof AnyZodObject>;
 
 export type CommandStrings = (string | number)[];
+export type CommandData = Record<string, any>;
 
 export const defineConfig = (
 	options: Partial<{
 		parser: ParserOptions;
-		hook: {
-			before: (commands: CommandStrings, data: object) => Promise<unknown>;
-			after: (commands: CommandStrings, data: object) => Promise<void>;
-		};
+		hook: Partial<{
+			extra: (
+				commands: CommandStrings,
+				data: CommandData,
+			) => Promise<CommandData>;
+			before: (commands: CommandStrings, data: CommandData) => Promise<unknown>;
+			after: (commands: CommandStrings, data: CommandData) => Promise<void>;
+		}>;
 	}>,
 ) => options;
 

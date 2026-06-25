@@ -11,17 +11,16 @@ const finalConfigFile = "mcmd.config.ts";
 export async function pluginCode(
 	options?: Partial<{
 		ignoreCLI: boolean;
-		javascript: boolean;
 		appDir?: string;
 		outDir?: string;
 		shebang?: "bun" | "node";
-		config?: string
+		config?: string;
 	}>,
 ) {
 	const appDir = options?.appDir || "./app";
 	const outDir = options?.outDir || "./.mcmd";
 	const configFileSrc = options?.config || "config.ts";
-	let foundConfigFile = null
+	let foundConfigFile = null;
 
 	// Build routes from app directory using unrouting
 	const routes = buildRoutesFromAppDir(appDir);

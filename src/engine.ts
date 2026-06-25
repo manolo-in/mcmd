@@ -1,9 +1,8 @@
 import parser from "yargs-parser";
 import { type AnyZodObject, z } from "zod";
-import type { CommandStrings } from "./lib/define";
+import { fromError } from "zod-validation-error";
+import type { CommandData, CommandStrings, DefineCommand } from "./lib/define";
 
-export { fromError } from "zod-validation-error";
-export { argumentParser as optionParser } from "zodcli";
 export { createTree, getFromTree } from "./lib/tree";
 
 export const mainParser = parser;
@@ -70,5 +69,37 @@ export const runHook = async (
 		return await hook(commands, data);
 	} catch (error) {
 		console.error("Error in hook:", error);
+		process.exit(1);
+	}
+};
+
+const isObject = (value: unknown): value is Record<string, unknown> => {
+	return value !== null && typeof value === "object" && !Array.isArray(value);
+};
+
+export const mergeObjects = (obj1: unknown, obj2: unknown): object => {
+	const first = isObject(obj1) ? obj1 : {};
+	const second = isObject(obj2) ? obj2 : {};
+	return {
+		...first,
+		...second,
+	};
+};
+
+export const runCommand = async <OP extends AnyZodObject>(
+	Code: DefineCommand<OP, any>,
+	args: CommandData,
+	options: OP,
+	beforeData: unknown,
+) => {
+	const help = getHelp(args, options);
+	if (help) return;
+
+	const data = trys(() => options.parse(args));
+
+	if (data.isSuccess) await Code(data.data, beforeData);
+	else {
+		const validationError = fromError(data.error);
+		console.error(validationError.toString());
 	}
 };

@@ -1,24 +1,11 @@
-export const template = (path: string) => `import Code, {
-    // alias,
-    // optionAlias,
-    options,
-} from "./app/${path}";
+export const template = (
+	path: string,
+) => `import Code, { options } from "./app/${path}";
+import { CommandData } from "mcmd";
+import { runCommand } from "mcmd/engine";
 
-import { fromError, getHelp, optionParser, trys } from "mcmd/engine";
-
-export default async function (args: unknown, beforeData: unknown) {
-    const help = getHelp(args, options)
-    if (help) return;
-
-    const data = trys(() => options.parse(args));
-
-    if (data.isSuccess) await Code
-        // @ts-ignore
-        (data.data, beforeData);
-    else {
-        const validationError = fromError(data.error);
-        console.error(validationError.toString());
-    }
+export default async function (args: CommandData, beforeData: unknown) {
+	await runCommand(Code, args, options, beforeData)
 }`;
 
 type FileData = {
@@ -33,7 +20,7 @@ export const entryTemplate = (
 	tree: string,
 	shebang?: "bun" | "node",
 ) => `${shebang ? `#!/usr/bin/env ${shebang}\n` : ""}
-import { getFromTree, mainParser, runHook } from "mcmd/engine"
+import { getFromTree, mainParser, runHook, mergeObjects } from "mcmd/engine"
 import mcmdConfig from "./mcmd.config.ts"
 
 ${files.map((f) => `import ${f.importName} from "./${f.fileName}"`).join("\n")}
@@ -45,20 +32,20 @@ const args = process.argv.slice(2);
 const { _: commands, ...data } = mainParser(args, mcmdConfig.parser);
 
 const beforeData = await runHook(mcmdConfig?.hook?.before, commands, data);
+const extendedData = await runHook(mcmdConfig?.hook?.extra, commands, data);
+
+const mergedData = mergeObjects(extendedData, data)
 
 const cmdFunction = getFromTree(commands, tree);
-await cmdFunction(data, beforeData);
+await cmdFunction(mergedData, beforeData);
 
-await runHook(mcmdConfig?.hook?.after, commands, data);
+await runHook(mcmdConfig?.hook?.after, commands, mergedData);
 `;
 
 export const defaultConfig = () => `import { defineConfig } from 'mcmd';
 
 export default defineConfig({
 	parser: {},
-	hook: {
-		before: async (commands, data) => {},
-		after: async (commands, data) => {},
-	}
+	hook: {}
 })
 `;

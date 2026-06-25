@@ -198,7 +198,7 @@ export const options = z.object({
 
 export default Command<typeof options, {}>((data, beforeData) => {
 	const { name } = data;
-	Console.log("Hi", name); 
+	Console.log("Hi", name);
 });
 ```
 
@@ -211,20 +211,24 @@ export default defineConfig({
 	// paste your parser config here
 	// eg
 	parser: {
-		string: ['bar'], 
+		string: ["bar"],
 		configuration: {
-			'boolean-negation': false
-		}
+			"boolean-negation": false,
+		},
 	},
 	// custom hook for before and after running the command
 	hook: {
-		after: async (commands, data) => {},
-		
 		// before, but after parsing the arguments
 		before: async (commands, data) => {
 			return beforeData; // access this ↴
 		},
 		// export default Command((data, beforeData) => {})
+
+		extra: async (commands, data) => {
+			return extraData; // access this ↴
+		},
+
+		after: async (commands, dataWithExtraData) => {},
 	},
 });
 ```
