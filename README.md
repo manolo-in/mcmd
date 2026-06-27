@@ -23,6 +23,16 @@ npx create mcmd-app --name my-cli
 bun create mcmd-app --name my-cli
 ```
 
+### Install MCMD skill (skills.sh)
+
+You can install the MCMD skill files from this repository using the Skills CLI:
+
+```bash
+npx skills add manolo-in/mcmd
+```
+
+This pulls the repository skill collection (including `mcmd-cli`) so developers can use the same guidance in their own projects.
+
 ### Folder Structure
 
 ```
@@ -32,6 +42,7 @@ root
  │
  ├─┬ app
  │ ├── index.ts          # npx my-cli
+ │ ├── config.ts         # config file
  │ ├─┬ init
  │ │ ├── something.ts    # npx my-cli init something
  │ │ └── index.ts        # npx my-cli init
